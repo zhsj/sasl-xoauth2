@@ -108,4 +108,5 @@ func getAuthString(user *C.char, refreshToken *C.char, auth **C.char, authLen *C
 }
 
 func main() {
+	printRefreshToken()
 }
