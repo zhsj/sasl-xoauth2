@@ -6,7 +6,7 @@ package main
 #include <sasl/sasl.h>
 #include <sasl/saslplug.h>
 
-extern void getAuthString(char *, char *, char **, unsigned *);
+extern void getAuthString(char *, int, char *, int, char **, unsigned *);
 
 static int get_cb_val(const sasl_utils_t *utils, unsigned int id, const char **result, unsigned *result_len) {
 	int ret = SASL_FAIL;
@@ -52,7 +52,7 @@ static int client_mech_step(void *conn_context, sasl_client_params_t *params,
 	ret = params->canon_user(params->utils->conn, authname, authname_len, SASL_CU_AUTHID | SASL_CU_AUTHZID, oparams);
 	char * auth;
 	unsigned auth_len;
-	getAuthString(authname, refresh_token, &auth, &auth_len);
+	getAuthString(authname, authname_len, refresh_token, refresh_token_len, &auth, &auth_len);
 	*clientout = auth;
 	*clientoutlen = auth_len;
 	return ret;
@@ -101,8 +101,8 @@ func sasl_client_plug_init(utils *C.sasl_utils_t, maxversion C.int, out_version 
 }
 
 //export getAuthString
-func getAuthString(user *C.char, refreshToken *C.char, auth **C.char, authLen *C.uint) {
-	authString := genAuthString(C.GoString(user), C.GoString(refreshToken))
+func getAuthString(user *C.char, userLen C.int, refreshToken *C.char, refreshTokenLen C.int, auth **C.char, authLen *C.uint) {
+	authString := genAuthString(C.GoStringN(user, userLen), C.GoStringN(refreshToken, refreshTokenLen))
 	*authLen = C.uint(len(authString))
 	*auth = C.CString(authString)
 }

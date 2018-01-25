@@ -15,6 +15,8 @@ var (
 
 func getToken(refreshToken string) (string, error) {
 	var token struct {
+		Error       string `json:"error"`
+		ErrorDesc   string `json:"error_description"`
 		AccessToken string `json:"access_token"`
 	}
 	values := url.Values{
@@ -33,6 +35,9 @@ func getToken(refreshToken string) (string, error) {
 		return "", err
 	}
 
+	if token.Error != "" {
+		return "", fmt.Errorf("refresh token failed: %s, %s", token.Error, token.ErrorDesc)
+	}
 	return token.AccessToken, nil
 }
 
@@ -67,23 +72,23 @@ func printRefreshToken() {
 		fmt.Println(err)
 		return
 	}
-	//body, err := ioutil.ReadAll(resp.Body)
-	//defer resp.Body.Close()
-	//fmt.Println(string(body))
 	err = json.NewDecoder(resp.Body).Decode(&token)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	if token.Error != "" {
-		fmt.Println("Error: ", token.ErrorDesc)
+		fmt.Println("Error: ", token.Error, token.ErrorDesc)
 	} else {
 		fmt.Println("Use this secret as password in Muttrc: ", token.RefreshToken)
 	}
 }
 
 func genAuthString(user, refreshToken string) string {
-	token, _ := getToken(refreshToken)
+	token, err := getToken(refreshToken)
+	if err != nil {
+		return err.Error()
+	}
 	auth := strings.Join([]string{"user=", user, "\x01auth=Bearer ", token, "\x01\x01"}, "")
 	return auth
 }
