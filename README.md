@@ -18,11 +18,18 @@ sudo make install
 
 ## Use
 
-Run `./sasl-xoauth2` to obtain a token, then set it as a password in `muttrc`, like:
+Use [Mutt](http://www.mutt.org/) to login GMail IMAP/SMTP with
+[OAuth2](https://developers.google.com/gmail/imap/xoauth2-protocol).
+
+First run `./sasl-xoauth2` to obtain a token, then set it as a password in `muttrc`, like:
 
 ```
+set folder      = "imaps://imap.gmail.com/"
+
 set imap_user   = "example@gmail.com"
 set imap_pass   = "token"
+
+set smtp_url = "smtps://$imap_user:$imap_pass@smtp.gmail.com"
 
 # set imap_authenticators="XOAUTH2"
 set smtp_authenticators="XOAUTH2"
