@@ -1,0 +1,6 @@
+package oauth
+
+var (
+	ClientID     = "##CLIENTID##"
+	ClientSecret = "##CLIENTSECRET##"
+)

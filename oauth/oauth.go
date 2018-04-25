@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-var (
-	ClientID     = ""
-	ClientSecret = ""
-)
-
 func getToken(refreshToken string) (string, error) {
 	var token struct {
 		Error       string `json:"error"`

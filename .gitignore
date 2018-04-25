@@ -1,2 +1,4 @@
-sasl-xoauth2*
-libxoauth2*
+sasl-xoauth2
+libxoauth2.so
+*.h
+oauth/conf.go
