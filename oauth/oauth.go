@@ -1,4 +1,4 @@
-package main
+package oauth
 
 import (
 	"encoding/json"
@@ -41,7 +41,7 @@ func getToken(refreshToken string) (string, error) {
 	return token.AccessToken, nil
 }
 
-func printRefreshToken() {
+func PrintRefreshToken() {
 	values := url.Values{
 		"client_id":     {ClientID},
 		"redirect_uri":  {"urn:ietf:wg:oauth:2.0:oob"},
@@ -66,6 +66,7 @@ func printRefreshToken() {
 		Error        string `json:"error"`
 		ErrorDesc    string `json:"error_description"`
 		RefreshToken string `json:"refresh_token"`
+		AccessToken  string `json:"access_token"`
 	}
 	resp, err := http.PostForm("https://www.googleapis.com/oauth2/v4/token", values)
 	if err != nil {
@@ -81,10 +82,11 @@ func printRefreshToken() {
 		fmt.Println("Error: ", token.Error, token.ErrorDesc)
 	} else {
 		fmt.Println("Use this secret as password in Muttrc: ", token.RefreshToken)
+		fmt.Println("The temporary access token is: ", token.AccessToken)
 	}
 }
 
-func genAuthString(user, refreshToken string) string {
+func GenAuthString(user, refreshToken string) string {
 	token, err := getToken(refreshToken)
 	if err != nil {
 		return err.Error()

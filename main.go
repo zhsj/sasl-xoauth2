@@ -92,6 +92,7 @@ static inline int client_plug_init(const sasl_utils_t *utils, int maxversion, in
 }
 */
 import "C"
+import "github.com/zhsj/sasl-xoauth2/oauth"
 
 //export sasl_client_plug_init
 func sasl_client_plug_init(utils *C.sasl_utils_t, maxversion C.int, out_version *C.int, pluglist **C.sasl_client_plug_t, plugcount *C.int) C.int {
@@ -102,11 +103,11 @@ func sasl_client_plug_init(utils *C.sasl_utils_t, maxversion C.int, out_version 
 
 //export getAuthString
 func getAuthString(user *C.char, userLen C.int, refreshToken *C.char, refreshTokenLen C.int, auth **C.char, authLen *C.uint) {
-	authString := genAuthString(C.GoStringN(user, userLen), C.GoStringN(refreshToken, refreshTokenLen))
+	authString := oauth.GenAuthString(C.GoStringN(user, userLen), C.GoStringN(refreshToken, refreshTokenLen))
 	*authLen = C.uint(len(authString))
 	*auth = C.CString(authString)
 }
 
 func main() {
-	printRefreshToken()
+	oauth.PrintRefreshToken()
 }

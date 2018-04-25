@@ -1,13 +1,14 @@
 CLIENTID :=
 CLIENTSECRET :=
 
-LDFLAGS := -s -w -X main.ClientID=$(CLIENTID) -X main.ClientSecret=$(CLIENTSECRET)
+PKG := github.com/zhsj/sasl-xoauth2
+LDFLAGS := -s -w -X $(PKG)/oauth.ClientID=$(CLIENTID) -X $(PKG)/oauth.ClientSecret=$(CLIENTSECRET)
 
 .PHONY: clean
 
 all: build
 
-build: main.go oauth.go
+build: main.go oauth/oauth.go
 	go build -buildmode=c-shared -ldflags="$(LDFLAGS)" -o libxoauth2.so
 	go build -ldflags="$(LDFLAGS)"
 
