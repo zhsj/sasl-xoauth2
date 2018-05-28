@@ -2,12 +2,13 @@
 
 ## Build
 
-Go https://console.developers.google.com/ and obtain an OAuth2 ID/secret.
+Go https://console.developers.google.com/ (Credentials -> Create credentials -> OAuth client ID).
+Then obtain a pair of OAuth2 ID & secret.
 
 Build dependency: `libsasl2-dev`.
 
 ```
-make build CLIENTID= CLIENTSECRET=
+make build CLIENTID=YOUR_CLIENT_ID CLIENTSECRET=YOUR_CLIENT_SECRET
 ```
 
 ## Install
