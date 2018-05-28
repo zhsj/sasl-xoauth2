@@ -77,7 +77,7 @@ func PrintRefreshToken() {
 		fmt.Println("Error: ", token.Error, token.ErrorDesc)
 	} else {
 		fmt.Println("Use this secret as password in Muttrc: ", token.RefreshToken)
-		fmt.Println("The temporary access token is: ", token.AccessToken)
+		// fmt.Println("The temporary access token is: ", token.AccessToken)
 	}
 }
 
