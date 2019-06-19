@@ -1,6 +1,9 @@
 CLIENTID :=
 CLIENTSECRET :=
 
+LIBDIR := /usr/lib/$(shell gcc -print-multiarch)/sasl2
+
+
 .PHONY: clean
 
 all: build
@@ -12,12 +15,12 @@ build: main.go oauth/oauth.go oauth/conf.go
 	go build -buildmode=c-shared -ldflags="-s -w" -o libxoauth2.so
 	go build -ldflags="-s -w"
 
-cgo: main.go oauth/oauth.go oauth/conf.go
-	go-7 build -buildmode=c-shared -o libxoauth2.so
-	go-7 build
-
 install:
-	install -m755 libxoauth2.so /usr/lib/sasl2/
+	mkdir -p $(LIBDIR)
+	install -m644 libxoauth2.so $(LIBDIR)
+
+uninstall:
+	rm -rf $(LIBDIR)/libxoauth2.so
 
 clean:
 	rm -rf sasl-xoauth2 libxoauth2.so *.h oauth/conf.go
